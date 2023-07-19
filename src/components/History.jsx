@@ -18,6 +18,7 @@ import {
   doc,
   deleteDoc,
   runTransaction,
+  addDoc,
 } from "firebase/firestore";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -92,7 +93,22 @@ function History() {
 
   const handleDelete = async (item) => {
     let val;
-    show === "Purchase History" ? (val = item.cost) : (val = -item.amount);
+    if (show === "Purchase History") {
+      val = item.cost;
+      await addDoc(collection(db, "Purchase's Delete History"), {
+        cost: val,
+        ingredients: item.ingredients,
+        timestamp: item.timestamp,
+      });
+    } else {
+      val = -item.amount;
+      await addDoc(collection(db, "AddMoney's Delete History"), {
+        amount: item.amount,
+        user: item.user,
+        Detail: item.Detail,
+        timestamp: item.timestamp,
+      });
+    }
     await runTransaction(db, async (t) => {
       const docTran = doc(db, "Balance", "Balance");
       const tran = await t.get(docTran);

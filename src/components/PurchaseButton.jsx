@@ -39,7 +39,7 @@ function PurchaseButton() {
       setWarning("Please fill in the blank");
       return;
     }
-    const docRef = await addDoc(collection(db, "Purchase History"), {
+    await addDoc(collection(db, "Purchase History"), {
       cost: parseInt(cost),
       ingredients: ingredients,
       timestamp: serverTimestamp(),

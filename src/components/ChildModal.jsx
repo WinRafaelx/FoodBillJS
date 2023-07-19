@@ -35,7 +35,7 @@ function ChildModal({ handleDelete, item, time, type }) {
       <IconButton
         aria-label="delete"
         size="small"
-        color="danger"
+        color="error"
         onClick={handleOpen}
       >
         <DeleteIcon />
@@ -85,6 +85,7 @@ function ChildModal({ handleDelete, item, time, type }) {
               size="large"
               variant="outlined"
               sx={{ mr: 1 }}
+              color="error"
             >
               Cancel
             </Button>
@@ -95,6 +96,7 @@ function ChildModal({ handleDelete, item, time, type }) {
                 handleClose();
               }}
               variant="contained"
+              color="error"
             >
               Confirm
             </Button>

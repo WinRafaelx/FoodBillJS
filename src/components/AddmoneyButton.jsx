@@ -46,7 +46,7 @@ function AddmoneyButton() {
       setWarning("Please fill in the blank");
       return;
     }
-    const docRef = await addDoc(collection(db, "AddMoney History"), {
+    await addDoc(collection(db, "AddMoney History"), {
       amount: parseInt(money),
       user: user,
       Detail: Detail,
