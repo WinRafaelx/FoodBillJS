@@ -35,7 +35,7 @@ function ChildModal({ handleDelete, item, time, type }) {
       <IconButton
         aria-label="delete"
         size="small"
-        color="warning"
+        color="danger"
         onClick={handleOpen}
       >
         <DeleteIcon />
