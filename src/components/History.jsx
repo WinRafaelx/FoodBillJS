@@ -10,9 +10,18 @@ import {
   IconButton,
 } from "@mui/material";
 import { db } from "../firebase/firebase.js";
-import { query, orderBy, collection, getDocs, doc, deleteDoc, runTransaction } from "firebase/firestore";
+import {
+  query,
+  orderBy,
+  collection,
+  getDocs,
+  doc,
+  deleteDoc,
+  runTransaction,
+} from "firebase/firestore";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ChildModal from "./ChildModal.jsx";
 
 const style = {
   position: "absolute",
@@ -83,7 +92,7 @@ function History() {
 
   const handleDelete = async (item) => {
     let val;
-    show === "Purchase History" ?  val = item.cost : val = -item.amount;
+    show === "Purchase History" ? (val = item.cost) : (val = -item.amount);
     await runTransaction(db, async (t) => {
       const docTran = doc(db, "Balance", "Balance");
       const tran = await t.get(docTran);
@@ -95,7 +104,6 @@ function History() {
     FetchCentral();
   };
 
-  
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -145,20 +153,22 @@ function History() {
                     }}
                   >
                     <Typography>{item.ingredients}</Typography>
-                    <Typography sx={{mr:1}}>{item.cost}</Typography>
+                    <Typography sx={{ mr: 1 }}>{item.cost}</Typography>
                   </Box>
                   <Box
                     sx={{
                       display: "flex",
                       justifyContent: "space-between",
-                      alignItems: "center"
+                      alignItems: "center",
                     }}
                   >
                     <Typography>{convertToDateTime(item.timestamp)}</Typography>
-                    <IconButton aria-label="delete" size="small" color="warning"
-                    onClick={() => handleDelete(item)}>
-                      <DeleteIcon />
-                    </IconButton>
+                    <ChildModal
+                      handleDelete={handleDelete}
+                      item={item}
+                      time={convertToDateTime(item.timestamp)}
+                      type={show}
+                    />
                   </Box>
                 </Box>
               ))}
@@ -167,37 +177,39 @@ function History() {
             <>
               {addmoney.map((item) => (
                 <Box
-                sx={{
-                  border: "1px solid black",
-                  mb: 1,
-                  p: 1,
-                  borderRadius: "5px",
-                }}
-                key={item.id}
-              >
-                <Box
                   sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
+                    border: "1px solid black",
+                    mb: 1,
+                    p: 1,
+                    borderRadius: "5px",
                   }}
+                  key={item.id}
                 >
-                  <Typography>{item.user}</Typography>
-                  <Typography sx={{mr:1}}>{item.amount}</Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography>{item.user}</Typography>
+                    <Typography sx={{ mr: 1 }}>{item.amount}</Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography>{convertToDateTime(item.timestamp)}</Typography>
+                    <ChildModal
+                      handleDelete={handleDelete}
+                      item={item}
+                      time={convertToDateTime(item.timestamp)}
+                      type={show}
+                    />
+                  </Box>
                 </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  <Typography>{convertToDateTime(item.timestamp)}</Typography>
-                  <IconButton aria-label="delete" size="small" color="warning"
-                  onClick={() => handleDelete(item)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              </Box>
               ))}
             </>
           )}
